@@ -1,0 +1,20 @@
+package cl.dgac.incidentes.dtos;
+
+import cl.dgac.incidentes.model.ModeloTipoIncidente;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record DtoIncidente(
+    Long Id,
+    @NotBlank(message = "Devemos tener una discripcion")
+    @Size(max = 500 , min=4, message = "la descripcion debe tener entre 3  a 500 caracteres")
+    String descripcion,
+    @NotBlank(message = "El tipo no deve estar en blanco")
+    ModeloTipoIncidente tipo,
+    @NotBlank(message= "no debe estar en blanco")
+    @Size(max = 60, min= 3, message = "quien deve tener entre 3 a 60 carcteres" )
+    String quien
+
+) {
+
+}
