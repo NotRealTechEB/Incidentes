@@ -32,7 +32,7 @@ public class ModeloIncidentes {
         referencedColumnName = "id",  // Columna a la que apunta en la tabla 'usuarios'
         foreignKey = @ForeignKey(name = "id_tipo") // Nombre del constraint
     )
-    private ModeloIncidentes tipo ;
+    private ModeloTipoIncidente tipo ;
     @Column(nullable = false, length =  60)
     private  String quien;
 
