@@ -48,5 +48,6 @@ public class Controller {
     public ResponseEntity<String> borrar(DtoTipoIncidente entity){
         return new ResponseEntity<String>(servicio1.delete(entity),HttpStatus.OK);
     }
+    // parte de incidentes 
     
 }
