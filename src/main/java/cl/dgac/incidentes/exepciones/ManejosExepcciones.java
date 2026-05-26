@@ -32,8 +32,8 @@ public class ManejosExepcciones {
         DtoError error = new DtoError(
             LocalDateTime.now(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "lo sentimos tene,os un inconveiente",
-            "eeror inesperado "+ex.getMessage(),
+            "lo sentimos teneos un inconveiente",
+            "eeror inesperado comunicate con soporte ti",
             request.getRequestURI()
         );
         return new ResponseEntity<DtoError>(error,HttpStatus.INTERNAL_SERVER_ERROR);

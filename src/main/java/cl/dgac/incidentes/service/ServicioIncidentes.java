@@ -10,6 +10,7 @@ import cl.dgac.incidentes.exepciones.ErrorRecursos;
 import cl.dgac.incidentes.mapper.MapperIncidentes;
 import cl.dgac.incidentes.model.ModeloIncidentes;
 import cl.dgac.incidentes.repository.RepositorioIncidente;
+import cl.dgac.incidentes.validacion.validacionFormatofecha;
 
 @Service
 public class ServicioIncidentes {
@@ -28,13 +29,23 @@ public class ServicioIncidentes {
             return  MapperIncidentes.modelToDto(MapperIncidentes.addModeloIncidente(incidente, tipoIncidente));
     }
     public DtoIncidente update(Long id , DtoIncidente entity){
-        ModeloIncidentes incidente = MapperIncidentes.updateIncidente(id, entity);
+        ModeloIncidentes incidente = MapperIncidentes.resuelto(id, entity);
         repo.save(incidente);
         return MapperIncidentes.modelToDto(incidente);
     }
     public String delete (DtoIncidente incidente){
-        repo.delete(MapperIncidentes.updateIncidente(incidente.Id(),incidente ));
+        repo.delete(MapperIncidentes.resuelto(incidente.Id(),incidente ));
         return "el incidente "+ incidente+ " fue elimiada exitosamente";
+    }
+    public List<DtoIncidente> filtradoFecha(String f1, String f2){
+        List<DtoIncidente>lista = MapperIncidentes.listasDtoIntancia(
+        repo.filtrarPorRangoDeFechas(
+        validacionFormatofecha.formatoValido(f1),
+        validacionFormatofecha.formatoValido(f2)));
+        if (lista.isEmpty()){
+            throw new ErrorRecursos("Sindatos  en ese periodo de fechas");
+        }
+        return lista;
     }
 
 

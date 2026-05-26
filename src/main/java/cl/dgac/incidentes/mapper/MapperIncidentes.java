@@ -22,13 +22,14 @@ public class MapperIncidentes {
 
     public static DtoIncidente modelToDto(ModeloIncidentes entity){
         DtoIncidente dto = new DtoIncidente( entity.getId(),entity.getDescripcion(),entity.getTipo(),entity.getQuien(),
-        entity.getFecha_reporte(),entity.isResuelto(),entity.getRegion());
+        entity.getFecha_reporte(),false,entity.getRegion());
         return dto;
     }
     
-    public static ModeloIncidentes updateIncidente(Long id, DtoIncidente entity){
+    public static ModeloIncidentes resuelto(Long id, DtoIncidente entity){
         ModeloIncidentes modelo = addModeloIncidente(entity,MapperTipoIncidente.modelToDto(entity.tipo()));
         modelo.setId(id);
+        modelo.setResuelto(true);
         return modelo;
     }
 

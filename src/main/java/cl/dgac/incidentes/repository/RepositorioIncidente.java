@@ -11,9 +11,9 @@ import java.util.List;
 public interface RepositorioIncidente extends JpaRepository<ModeloIncidentes,Long> {
     
     @Query(
-        value = "SELECT * FROM incidentes WHERE fecha BETWEEN " +
-                "TO_TIMESTAMP(:fechaInicio, 'YYYY-MM-DD HH24:MI:SS') AND " +
-                "TO_TIMESTAMP(:fechaFin, 'YYYY-MM-DD HH24:MI:SS')", 
+        value = "SELECT * FROM incidentes WHERE fecha_reporte BETWEEN " +
+                "TO_TIMESTAMP(:fechaInicio ||' 00:00:00', 'YYYY-MM-DD HH24:MI:SS') AND " +
+                "TO_TIMESTAMP(:fechaFin||' 23:59:59', 'YYYY-MM-DD HH24:MI:SS')", 
         nativeQuery = true)
 
     List<ModeloIncidentes> filtrarPorRangoDeFechas(
