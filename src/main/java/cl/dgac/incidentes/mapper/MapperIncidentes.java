@@ -1,0 +1,40 @@
+package cl.dgac.incidentes.mapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cl.dgac.incidentes.dtos.DtoIncidente;
+import cl.dgac.incidentes.dtos.DtoTipoIncidente;
+import cl.dgac.incidentes.model.ModeloIncidentes;
+
+public class MapperIncidentes {
+    public static ModeloIncidentes addModeloIncidente(DtoIncidente entity, DtoTipoIncidente tipo){
+        ModeloIncidentes modelo = new ModeloIncidentes();
+        modelo.setId(null);
+        modelo.setDescripcion(entity.descripcion());
+        modelo.setTipo(MapperTipoIncidente.update(tipo.id(), tipo));
+        modelo.setQuien(entity.quien().toUpperCase());
+        return modelo;
+    }
+
+    public static DtoIncidente modelToDto(ModeloIncidentes entity){
+        DtoIncidente dto = new DtoIncidente( entity.getId(),entity.getDescripcion(),entity.getTipo(),entity.getQuien(),
+        entity.getFecha_reporte(),entity.isResuelto());
+        return dto;
+    }
+    
+    public static ModeloIncidentes updateIncidente(Long id, DtoIncidente entity){
+        ModeloIncidentes modelo = addModeloIncidente(entity,MapperTipoIncidente.modelToDto(entity.tipo()));
+        modelo.setId(id);
+        return modelo;
+    }
+
+    public static List<DtoIncidente> listasDtoIntancia (List<ModeloIncidentes> lista){
+        List<DtoIncidente> dtos = new ArrayList<>();
+        for (ModeloIncidentes mode : lista){
+            dtos.add(modelToDto(mode));
+        }
+        return dtos;
+    }
+
+}

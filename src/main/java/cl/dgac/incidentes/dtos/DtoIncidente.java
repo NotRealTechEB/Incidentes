@@ -1,5 +1,7 @@
 package cl.dgac.incidentes.dtos;
 
+import java.time.LocalDateTime;
+
 import cl.dgac.incidentes.model.ModeloTipoIncidente;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,7 +15,10 @@ public record DtoIncidente(
     ModeloTipoIncidente tipo,
     @NotBlank(message= "no debe estar en blanco")
     @Size(max = 60, min= 3, message = "quien deve tener entre 3 a 60 carcteres" )
-    String quien
+    String quien,
+    LocalDateTime fecha_reporte,
+    boolean resuelto
+
 
 ) {
 

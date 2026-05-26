@@ -19,7 +19,7 @@ public class ServicioTipoIncidente {
     private RepositorioTipoIncidente repo;
 
     public List<DtoTipoIncidente> listarTipoIncidentes(){
-        List<DtoTipoIncidente> lista = MapperTipoIncidente.lsiatasDto(repo.findAll());
+        List<DtoTipoIncidente> lista = MapperTipoIncidente.listasDto(repo.findAll());
         if (lista.isEmpty()){
             throw new ErrorRecursos("no existen tipos de incidentes ");
         }

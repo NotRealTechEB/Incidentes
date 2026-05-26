@@ -9,3 +9,4 @@ import cl.dgac.incidentes.model.ModeloTipoIncidente;
 public interface RepositorioTipoIncidente extends JpaRepository<ModeloTipoIncidente,Long>{
     ModeloTipoIncidente findByTipo(String tipo);
 }
+
