@@ -14,12 +14,15 @@ public class MapperIncidentes {
         modelo.setDescripcion(entity.descripcion());
         modelo.setTipo(MapperTipoIncidente.update(tipo.id(), tipo));
         modelo.setQuien(entity.quien().toUpperCase());
+        modelo.setResuelto(entity.resuelto());
+        modelo.setRegion(entity.region());
+        modelo.setFecha_reporte(entity.fecha_reporte());
         return modelo;
     }
 
     public static DtoIncidente modelToDto(ModeloIncidentes entity){
         DtoIncidente dto = new DtoIncidente( entity.getId(),entity.getDescripcion(),entity.getTipo(),entity.getQuien(),
-        entity.getFecha_reporte(),entity.isResuelto());
+        entity.getFecha_reporte(),entity.isResuelto(),entity.getRegion());
         return dto;
     }
     

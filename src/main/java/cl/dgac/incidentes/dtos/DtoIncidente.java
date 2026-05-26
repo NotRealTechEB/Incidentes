@@ -17,7 +17,10 @@ public record DtoIncidente(
     @Size(max = 60, min= 3, message = "quien deve tener entre 3 a 60 carcteres" )
     String quien,
     LocalDateTime fecha_reporte,
-    boolean resuelto
+    boolean resuelto,
+    @Size(max = 35, min=4, message = "El nombre de la region deve tener entre 4 a 35 caracteres")
+    @NotBlank(message = "la region deve tener un nombre ")
+    String region
 
 
 ) {

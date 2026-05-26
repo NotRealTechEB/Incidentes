@@ -43,6 +43,8 @@ public class ModeloIncidentes {
     private LocalDateTime fecha_reporte;
     @Column(nullable = false )
     private boolean resuelto;
+    @Column(nullable = false,length= 35)
+    private String region;
 
     @PrePersist
     protected void onCreate() {
