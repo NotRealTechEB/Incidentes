@@ -16,6 +16,7 @@ import cl.dgac.incidentes.dtos.DtoError;
 import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ManejosExepcciones {
+
     @ExceptionHandler(ErrorRecursos.class)
     public ResponseEntity<DtoError> ErrorEnRecursos(ErrorRecursos ex,HttpServletRequest request){
         DtoError error = new DtoError(
@@ -48,6 +49,7 @@ public class ManejosExepcciones {
             errores.put(campo,mensaje);
         });
         return new ResponseEntity<>(errores,HttpStatus.BAD_REQUEST);}
+        
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<DtoError> manejarDuplicados(DataIntegrityViolationException ex, HttpServletRequest request){
         DtoError error = new DtoError(
