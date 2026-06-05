@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cl.dgac.incidentes.dtos.DtoIncidente;
-import cl.dgac.incidentes.dtos.DtoTipoIncidente;
 import cl.dgac.incidentes.exepciones.ErrorRecursos;
 import cl.dgac.incidentes.mapper.MapperIncidentes;
 import cl.dgac.incidentes.model.ModeloIncidentes;
@@ -23,10 +22,13 @@ public class ServicioIncidentes {
         }
         return lista;}
     
-    public DtoIncidente aadIncidente(DtoIncidente incidente,
-        DtoTipoIncidente tipoIncidente){
-            repo.save(MapperIncidentes.addModeloIncidente(incidente, tipoIncidente));
-            return  MapperIncidentes.modelToDto(MapperIncidentes.addModeloIncidente(incidente, tipoIncidente));
+    public DtoIncidente aadIncidente(DtoIncidente incidente) {
+        DtoIncidente guardado = new DtoIncidente(
+            incidente.Id(),incidente.descripcion(),incidente.tipo(),incidente.quien()
+            ,incidente.fecha_reporte(),incidente.resuelto(),incidente.region()
+        );
+        repo.save(MapperIncidentes.addModeloIncidente(guardado));
+        return guardado;
     }
     public DtoIncidente update(Long id , DtoIncidente entity){
         ModeloIncidentes incidente = MapperIncidentes.resuelto(id, entity);

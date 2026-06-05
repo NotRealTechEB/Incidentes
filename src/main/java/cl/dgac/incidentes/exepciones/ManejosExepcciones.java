@@ -28,17 +28,7 @@ public class ManejosExepcciones {
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);}
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<DtoError> internalServer(Exception ex , HttpServletRequest request){
-        DtoError error = new DtoError(
-            LocalDateTime.now(),
-            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "lo sentimos teneos un inconveiente",
-            "eeror inesperado comunicate con soporte ti",
-            request.getRequestURI()
-        );
-        return new ResponseEntity<DtoError>(error,HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> exepcionesValicadionDto(MethodArgumentNotValidException ex){

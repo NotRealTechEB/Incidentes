@@ -2,17 +2,15 @@ package cl.dgac.incidentes.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import cl.dgac.incidentes.dtos.DtoIncidente;
-import cl.dgac.incidentes.dtos.DtoTipoIncidente;
 import cl.dgac.incidentes.model.ModeloIncidentes;
 
 public class MapperIncidentes {
-    public static ModeloIncidentes addModeloIncidente(DtoIncidente entity, DtoTipoIncidente tipo){
+    public static ModeloIncidentes addModeloIncidente(DtoIncidente entity){
         ModeloIncidentes modelo = new ModeloIncidentes();
         modelo.setId(null);
         modelo.setDescripcion(entity.descripcion());
-        modelo.setTipo(MapperTipoIncidente.update(tipo.id(), tipo));
+        modelo.setTipo(entity.tipo());
         modelo.setQuien(entity.quien().toUpperCase());
         modelo.setResuelto(entity.resuelto());
         modelo.setRegion(entity.region());
@@ -27,7 +25,7 @@ public class MapperIncidentes {
     }
     
     public static ModeloIncidentes resuelto(Long id, DtoIncidente entity){
-        ModeloIncidentes modelo = addModeloIncidente(entity,MapperTipoIncidente.modelToDto(entity.tipo()));
+        ModeloIncidentes modelo = addModeloIncidente(entity);
         modelo.setId(id);
         modelo.setResuelto(true);
         return modelo;

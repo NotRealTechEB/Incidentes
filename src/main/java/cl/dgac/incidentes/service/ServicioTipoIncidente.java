@@ -26,11 +26,10 @@ public class ServicioTipoIncidente {
         return(MapperTipoIncidente.modelToDto(modelo));
     }
     public DtoTipoIncidente buscar (String tipo){
-        DtoTipoIncidente dto = MapperTipoIncidente.modelToDto(repo.findByTipo(tipo));
-        if (dto == null){
-            throw new ErrorRecursos("tipo no encontrado");
+        if (repo.findByTipo(tipo.toUpperCase()) == null){
+            return null;
         }
-        return dto;
+        return  MapperTipoIncidente.modelToDto(repo.findByTipo(tipo.toUpperCase()));
     }
     public  DtoTipoIncidente updateTipo(Long Id,DtoTipoIncidente entity){
         ModeloTipoIncidente modelo=repo.save(MapperTipoIncidente.update(Id,entity));

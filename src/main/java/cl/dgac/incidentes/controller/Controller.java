@@ -2,9 +2,10 @@ package cl.dgac.incidentes.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import cl.dgac.incidentes.dtos.DtoIncidente;
 import cl.dgac.incidentes.dtos.DtoTipoIncidente;
+import cl.dgac.incidentes.exepciones.ErrorRecursos;
+import cl.dgac.incidentes.mapper.MapperTipoIncidente;
 import cl.dgac.incidentes.service.ServicioIncidentes;
 import cl.dgac.incidentes.service.ServicioTipoIncidente;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("api/v1.0/Incidentes")
+@RequestMapping("/api/v1.0/Incidentes")
 public class Controller {
     private final ServicioTipoIncidente servicio1;
     private final ServicioIncidentes servicio2;
@@ -65,10 +66,17 @@ public class Controller {
     }
     
     @PostMapping("/crearIncidente")
-    public ResponseEntity<DtoIncidente> postMethodName(@Valid @RequestBody DtoIncidente entity) {        
-        return  new ResponseEntity<DtoIncidente>(servicio2.aadIncidente(entity, servicio1.buscar(entity.tipo().getTipo())),
-        HttpStatus.OK);
+    public ResponseEntity<DtoIncidente> postMethodName(@Valid @RequestBody DtoIncidente entity) { 
+        String name =entity.tipo().getTipo();
+        System.out.println(name);
+        if (servicio1.buscar(name) != null){
+            DtoTipoIncidente tipo = servicio1.buscar(name);
+            DtoIncidente incidente= new DtoIncidente(entity.Id(), entity.descripcion(),
+            MapperTipoIncidente.update(tipo.id(),tipo), entity.quien(), entity.fecha_reporte(), false, entity.region());
+            servicio2.aadIncidente(incidente);
+            return new ResponseEntity<DtoIncidente>(incidente,HttpStatus.CREATED);
+        }
+        throw new ErrorRecursos("tipo no encontrado");
     }
-    
     
 }

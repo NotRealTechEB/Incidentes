@@ -11,7 +11,6 @@ public record DtoIncidente(
     @NotBlank(message = "Devemos tener una discripcion")
     @Size(max = 500 , min=4, message = "la descripcion debe tener entre 3  a 500 caracteres")
     String descripcion,
-    @NotBlank(message = "El tipo no deve estar en blanco")
     ModeloTipoIncidente tipo,
     @NotBlank(message= "no debe estar en blanco")
     @Size(max = 60, min= 3, message = "quien deve tener entre 3 a 60 carcteres" )
