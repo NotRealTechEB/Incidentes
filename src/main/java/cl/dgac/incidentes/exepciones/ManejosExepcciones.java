@@ -46,7 +46,7 @@ public class ManejosExepcciones {
             LocalDateTime.now(),
             HttpStatus.CONFLICT.value(),
             "Error duplicado",
-            "El rut ingresado a se encuentra registrado ",
+            "id utilizada ",
             request.getRequestURI()
         );
         return new ResponseEntity<>(error,HttpStatus.CONFLICT);
