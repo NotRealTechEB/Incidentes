@@ -1,8 +1,6 @@
 package cl.dgac.incidentes.service;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cl.dgac.incidentes.dtos.DtoIncidente;
 import cl.dgac.incidentes.exepciones.ErrorRecursos;
@@ -13,8 +11,11 @@ import cl.dgac.incidentes.validacion.validacionFormatofecha;
 
 @Service
 public class ServicioIncidentes {
-    @Autowired
-    private RepositorioIncidente repo ;
+    
+    private final RepositorioIncidente repo ;
+    public ServicioIncidentes (RepositorioIncidente repo){
+        this.repo=repo;
+    }
     public List<DtoIncidente> listaIncidentes(){
         List<DtoIncidente> lista = MapperIncidentes.listasDtoIntancia(repo.findAll());
         if (lista.isEmpty()){
