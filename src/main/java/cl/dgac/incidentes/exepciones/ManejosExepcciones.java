@@ -1,6 +1,7 @@
 package cl.dgac.incidentes.exepciones;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,4 +57,8 @@ public class ManejosExepcciones {
     public ResponseEntity<DtoExeption> interlServErerror(Exception ex, HttpServletRequest request){
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR,"ocurrio un   error inesperado " + ex.getMessage(),request.getRequestURI(), null);
         }
+    @ExceptionHandler(DateTimeParseException.class) 
+    public ResponseEntity<DtoExeption> manejarErrorFecha(Exception ex, HttpServletRequest request){
+    return buildResponse(HttpStatus.BAD_REQUEST, "El formato de fecha es inválido. Use YYYY-MM-DD", request.getRequestURI(), null);
+}
 }

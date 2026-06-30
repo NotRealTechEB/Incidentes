@@ -9,6 +9,11 @@ import cl.dgac.incidentes.mapper.MapperTipoIncidente;
 import cl.dgac.incidentes.service.ServicioIncidentes;
 import cl.dgac.incidentes.service.ServicioTipoIncidente;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -18,7 +23,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestBody;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -36,8 +42,11 @@ public class Controller {
     @GetMapping("/listarTiposIncidentes")
     @Operation(
         summary = "obtener tipos de inicidente",
-        description = "Obtener Lista de Todos los tipos de incidentes de la BD"
-    )
+        description = "Obtener Lista de Todos los tipos de incidentes de la BD")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "404", description = "lista vacia es decir ningun tipo de incidente ")})
+
     public ResponseEntity<List<DtoTipoIncidente>> listar () {
         return new ResponseEntity<List<DtoTipoIncidente>>(servicio1.listarTipoIncidentes(),HttpStatus.OK);
     }
@@ -45,18 +54,40 @@ public class Controller {
     @GetMapping("/busacarTiposIncidetes")
     @Operation(
         summary = "obtener tipo de incidente",
-        description = "Obten el tipo de incidente BD"
-    )
+        description = "Obten el tipo de incidente BD")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "404", description = "tipo de incidente inexistente ")})
+        
     public ResponseEntity<DtoTipoIncidente>buscador(@RequestParam(name ="tipo") String tipo) {
         return new ResponseEntity<DtoTipoIncidente>(servicio1.buscar(tipo),HttpStatus.OK);
     }
-
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "400", description = "error en uno o mas valores del json")})
     @PostMapping("/crearTipoIncidente")
     @Operation(
         summary = "crear un tipo de incidente",
-        description = "Crea un  el tipo de incidente usando el Json correcto"
-    )
-    public ResponseEntity<DtoTipoIncidente> nuevoTipo (@Valid@RequestBody DtoTipoIncidente entity) {
+        description = "Crea un  el tipo de incidente usando el Json correcto")
+    
+    public ResponseEntity<DtoTipoIncidente> nuevoTipo (@Valid 
+        @RequestBody (
+        description = "Datos de la solicitud a crear",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = DtoTipoIncidente.class),
+            examples = @ExampleObject(
+            name = "Ejemplo de Tipo de Incidente",
+            summary = "Descripción del tipo de incidente",
+            value = """
+            {
+                "id": 1,
+                "tipo": "Falla de comunicación"
+            }
+            """
+            )
+        )) @org.springframework.web.bind.annotation.RequestBody DtoTipoIncidente entity) {
         return new ResponseEntity<DtoTipoIncidente>(servicio1.addTipo(entity),HttpStatus.OK);
     }
     @PutMapping("actualizarTiposIncidentes")
@@ -64,8 +95,29 @@ public class Controller {
         summary = "Actualiza un tipo de incidente",
         description = "Actualiza un  el tipo de incidente usando el Tipo incidente"
     )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "400", description = "error en uno o mas valores del json")}
+    )
+
     public ResponseEntity<DtoTipoIncidente> actualizar(@RequestParam(name= "tipo") String tipo, 
-    @Valid @RequestBody DtoTipoIncidente entity){
+    @Valid  @RequestBody (
+        description = "Datos para cerar un tipo de incidente",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = DtoTipoIncidente.class),
+            examples = @ExampleObject(
+            name = "Ejemplo de Tipo de Incidente",
+            summary = "Descripción del tipo de incidente",
+            value = """
+            {
+                "id": 1,
+                "tipo": "Falla de comunicación"
+            }
+            """
+            )
+        )) @org.springframework.web.bind.annotation.RequestBody DtoTipoIncidente entity){
         return new ResponseEntity<DtoTipoIncidente>(servicio1.
         updateTipo(
         servicio1.buscar(tipo).id()
@@ -76,15 +128,23 @@ public class Controller {
         summary = "Elimina  un tipo de incidente",
         description = "Elimina un tipo de incidente usando el json correto"
     )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "404", description = "error ese tiopo de incidente no existe")})
     public ResponseEntity<String> borrar(DtoTipoIncidente entity){
         return new ResponseEntity<String>(servicio1.delete(entity),HttpStatus.OK);
     }
-    // parte de incidentes 
+    // parte de incidentes//////////////////////////////////////////DIVICIONNNNNNNNNNNNN 
+
     @GetMapping("/listarIncidentes")
     @Operation(
         summary = "Muestra Incidentes ",
         description = "Lista todos los incidentes "
     )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "404", description = "lista vacia es decir ningun  Incidente reguistrado ")})
+
     public ResponseEntity<List<DtoIncidente>> listarIncidentes() {
         return new ResponseEntity<List<DtoIncidente>>(servicio2.listaIncidentes(), HttpStatus.OK);
     }
@@ -93,6 +153,12 @@ public class Controller {
         summary = "Muestra Incidentes por fecha  ",
         description = "Lista todos los incidentes sucedidos entre las fechas "
     )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode = "404", description = "lista vacia es decir ningun  Incidente reguistrado "),
+        @ApiResponse(responseCode =  "400", description = "error en el formato de la fecha use YYYY-MM-DD ")
+    })
+
     public ResponseEntity<List<DtoIncidente>> fechaFiltrado(@RequestParam (name = "fechaInicio", required = true) String fechaInicio,
     @RequestParam(name = "fechaFinal", required = true) String fechaFinal ) {
         return new ResponseEntity<List<DtoIncidente>>(servicio2.filtradoFecha(fechaInicio, fechaFinal),HttpStatus.OK);
@@ -103,17 +169,45 @@ public class Controller {
         summary = "crear un incidente",
         description = "Crea un incidente usando el Json correcto"
     )
-    public ResponseEntity<DtoIncidente> postMethodName(@Valid @RequestBody DtoIncidente entity) { 
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Operación exitosa"),
+        @ApiResponse(responseCode =  "400", description = "error en el formato de la fecha use YYYY-MM-DD ")
+    })
+    public ResponseEntity<DtoIncidente> postMethodName(@Valid  @RequestBody (
+        description = "Datos para cear un incidente",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = DtoIncidente.class),
+            examples = @ExampleObject(
+    name = "Ejemplo de Incidente",
+    summary = "Reporte completo de un incidente",
+    value = """
+    {
+        "id": 1,
+        "descripcion": "Falla en los sensores de proximidad durante el vuelo de inspección.",
+        "tipo": {
+            "id": 10,
+            "tipo": "Falla Técnica"
+        },
+        "quien": "DroneSolutions S.A.",
+        "fecha_reporte": "2026-06-28T10:30:00",
+        "resuelto": false,
+        "region": "REGIÓN METROPOLITANA"
+    }
+    """
+) 
+            
+        )) @org.springframework.web.bind.annotation.RequestBody
+        DtoIncidente entity) { 
         String name =entity.tipo().getTipo();
         System.out.println(name);
         if (servicio1.buscar(name) != null){
             DtoTipoIncidente tipo = servicio1.buscar(name);
-            DtoIncidente incidente= new DtoIncidente(entity.Id(), entity.descripcion(),
-            MapperTipoIncidente.update(tipo.id(),tipo), entity.quien(), entity.fecha_reporte(), false, entity.region());
-            servicio2.aadIncidente(incidente);
-            return new ResponseEntity<DtoIncidente>(incidente,HttpStatus.CREATED);
+            return new ResponseEntity<DtoIncidente>(servicio2.aadIncidente(entity),HttpStatus.CREATED);
         }
         throw new ErrorRecursos("tipo no encontrado");
     }
     
 }
+/////Crear  nuevas funcioones de put para catualizxar  solo agregale a la de arriba el id;

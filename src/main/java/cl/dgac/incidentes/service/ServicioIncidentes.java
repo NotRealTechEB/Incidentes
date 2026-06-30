@@ -1,5 +1,7 @@
 package cl.dgac.incidentes.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import cl.dgac.incidentes.dtos.DtoIncidente;
@@ -11,7 +13,24 @@ import cl.dgac.incidentes.validacion.validacionFormatofecha;
 
 @Service
 public class ServicioIncidentes {
-    
+     private final ArrayList<String>  regiones = new ArrayList<>(Arrays.asList(
+            "REGIÓN DE ARICA Y PARINACOTA",
+            "REGIÓN DE TARAPACÁ",
+            "REGIÓN DE ANTOFAGASTA",
+            "REGIÓN DE ATACAMA",
+            "REGIÓN DE COQUIMBO",
+            "REGIÓN DE VALPARAÍSO",
+            "REGIÓN METROPOLITANA DE SANTIAGO",
+            "REGIÓN DEL LIBERTADOR GENERAL BERNARDO O'HIGGINS",
+            "REGIÓN DEL MAULE",
+            "REGIÓN DE ÑUBLE",
+            "REGIÓN DEL BÍO BÍO",
+            "REGIÓN DE LA ARAUCANÍA",
+            "REGIÓN DE LOS RÍOS",
+            "REGIÓN DE LOS LAGOS",
+            "REGIÓN DE AYSÉN DEL GENERAL CARLOS IBÁÑEZ DEL CAMPO",
+            "REGIÓN DE MAGALLANES Y DE LA ANTÁRTICA CHILENA"
+        ));
     private final RepositorioIncidente repo ;
     public ServicioIncidentes (RepositorioIncidente repo){
         this.repo=repo;
@@ -24,12 +43,13 @@ public class ServicioIncidentes {
         return lista;}
     
     public DtoIncidente aadIncidente(DtoIncidente incidente) {
-        DtoIncidente guardado = new DtoIncidente(
-            incidente.Id(),incidente.descripcion(),incidente.tipo(),incidente.quien()
-            ,incidente.fecha_reporte(),incidente.resuelto(),incidente.region()
-        );
-        repo.save(MapperIncidentes.addModeloIncidente(guardado));
-        return guardado;
+        for (String i : regiones){
+            if (i.equals(incidente.region())){
+                repo.save(MapperIncidentes.addModeloIncidente(incidente));
+                return incidente;
+            }
+        }
+        throw new ErrorRecursos("region no existe o tiene ele formato icnortrecto el formato es REGIÓN DE ARICA Y PARINACOTA ");
     }
     public DtoIncidente update(Long id , DtoIncidente entity){
         ModeloIncidentes incidente = MapperIncidentes.resuelto(id, entity);
@@ -50,6 +70,7 @@ public class ServicioIncidentes {
         }
         return lista;
     }
+
 
 
 
