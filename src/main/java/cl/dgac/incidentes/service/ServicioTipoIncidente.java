@@ -29,7 +29,7 @@ public class ServicioTipoIncidente {
     }
     public DtoTipoIncidente buscar (String tipo){
         if (repo.findByTipo(tipo.toUpperCase()) == null){
-            return null;
+            throw new ErrorRecursos("tipo no encontrado");
         }
         return  MapperTipoIncidente.modelToDto(repo.findByTipo(tipo.toUpperCase()));
     }

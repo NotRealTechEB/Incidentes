@@ -1,31 +1,32 @@
 package cl.dgac.incidentes.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import cl.dgac.incidentes.dtos.DtoIncidente;
 import cl.dgac.incidentes.dtos.DtoTipoIncidente;
 import cl.dgac.incidentes.exepciones.ErrorRecursos;
-import cl.dgac.incidentes.mapper.MapperTipoIncidente;
 import cl.dgac.incidentes.service.ServicioIncidentes;
 import cl.dgac.incidentes.service.ServicioTipoIncidente;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+//import org.springframework.web.bind.annotation.RequestBody;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/v1.0/Incidentes")
@@ -72,7 +73,7 @@ public class Controller {
     
     public ResponseEntity<DtoTipoIncidente> nuevoTipo (@Valid 
         @RequestBody (
-        description = "Datos de la solicitud a crear",
+        description = "Datos del tipo de incidente  a crear",
         required = true,
         content = @Content(
             mediaType = "application/json",
@@ -102,7 +103,7 @@ public class Controller {
 
     public ResponseEntity<DtoTipoIncidente> actualizar(@RequestParam(name= "tipo") String tipo, 
     @Valid  @RequestBody (
-        description = "Datos para cerar un tipo de incidente",
+        description = "Datos para actualizar un tipo de incidente",
         required = true,
         content = @Content(
             mediaType = "application/json",
@@ -180,23 +181,23 @@ public class Controller {
             mediaType = "application/json",
             schema = @Schema(implementation = DtoIncidente.class),
             examples = @ExampleObject(
-    name = "Ejemplo de Incidente",
-    summary = "Reporte completo de un incidente",
-    value = """
-    {
-        "id": 1,
-        "descripcion": "Falla en los sensores de proximidad durante el vuelo de inspección.",
-        "tipo": {
-            "id": 10,
-            "tipo": "Falla Técnica"
-        },
-        "quien": "DroneSolutions S.A.",
-        "fecha_reporte": "2026-06-28T10:30:00",
-        "resuelto": false,
-        "region": "REGIÓN METROPOLITANA"
-    }
-    """
-) 
+            name = "Ejemplo de Incidente",
+            summary = "Reporte completo de un incidente",
+            value = """
+                    {
+                        "id": 1,
+                        "descripcion": "Falla en los sensores de proximidad durante el vuelo de inspección.",
+                        "tipo": {
+                            "id": 10,
+                            "tipo": "Falla Técnica"
+                        },
+                        "quien": "DroneSolutions S.A.",
+                        "fecha_reporte": "2026-06-28T10:30:00",
+                        "resuelto": false,
+                        "region": "REGIÓN METROPOLITANA"
+                    }
+                    """
+                ) 
             
         )) @org.springframework.web.bind.annotation.RequestBody
         DtoIncidente entity) { 
@@ -208,6 +209,44 @@ public class Controller {
         }
         throw new ErrorRecursos("tipo no encontrado");
     }
-    
+
+    @PutMapping("/modificarIncidentes")
+    public ResponseEntity<DtoIncidente> alctualizarIncidente (@RequestParam(name= "id", required = true ) Long id, 
+@RequestBody(
+    description = "Datos para modificar un incidente",
+        required = true,
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = DtoIncidente.class),
+            examples = @ExampleObject(
+            name = "Ejemplo de Incidente",
+            summary = "Reporte completo de un incidente",
+            value = """
+                    {
+                        "id": 1,
+                        "descripcion": "Falla en los sensores de proximidad durante el vuelo de inspección.",
+                        "tipo": {
+                            "id": 10,
+                            "tipo": "Falla Técnica"
+                        },
+                        "quien": "DroneSolutions S.A.",
+                        "fecha_reporte": "2026-06-28T10:30:00",
+                        "resuelto": false,
+                        "region": "REGIÓN METROPOLITANA"
+                    }
+                    """
+                ) 
+            
+        )) @org.springframework.web.bind.annotation.RequestBody DtoIncidente entity ){
+        String name =entity.tipo().getTipo();
+        if ((entity.Id().equals(id))|| (entity.equals(null)&& id!= null)){
+            if (servicio1.buscar(name) != null){
+                DtoTipoIncidente tipo = servicio1.buscar(name);
+                return new ResponseEntity<DtoIncidente>(servicio2.update(id, entity),HttpStatus.OK); 
+            }
+        }
+        throw new ErrorRecursos("tenemos ");   
+    }
 }
 /////Crear  nuevas funcioones de put para catualizxar  solo agregale a la de arriba el id;
+
