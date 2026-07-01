@@ -204,7 +204,7 @@ public class Controller {
         String name =entity.tipo().getTipo();
         System.out.println(name);
         if (servicio1.buscar(name) != null){
-            DtoTipoIncidente tipo = servicio1.buscar(name);
+            servicio1.buscar(name);
             return new ResponseEntity<DtoIncidente>(servicio2.aadIncidente(entity),HttpStatus.CREATED);
         }
         throw new ErrorRecursos("tipo no encontrado");
@@ -241,7 +241,7 @@ public class Controller {
         String name =entity.tipo().getTipo();
         if ((entity.Id().equals(id))|| (entity.equals(null)&& id!= null)){
             if (servicio1.buscar(name) != null){
-                DtoTipoIncidente tipo = servicio1.buscar(name);
+                servicio1.buscar(name);
                 return new ResponseEntity<DtoIncidente>(servicio2.update(id, entity),HttpStatus.OK); 
             }
         }
